@@ -1,0 +1,27 @@
+<main>
+  <h1>Insira a equação abaixo</h1>
+  <p>2x + 3x + 10 - 15 = 5</p>
+
+  <section>
+    <div>
+      <label for="before">Esquerda</label>
+      <input id="before" type="text" (input)="fetchBefore($event.target.value)" placeholder="2x + 3x + 10 - 15" />
+    </div>
+
+    <span>
+      =
+    </span>
+
+    <div>
+      <label for="after">Direita</label>
+      <input id="after" type="text" (input)="fetchAfter($event.target.value)" placeholder="5" />
+    </div>
+  </section>
+
+  <article>
+    <h4>Resultado</h4>
+    <p>{{ result }}</p>
+  </article>
+</main>
+
+<router-outlet></router-outlet>
