@@ -11,10 +11,13 @@ export class AppComponent {
   before = ""
   after = ""
   result = ""
+  result2 = ""
+  result3 = ""
+  result4 = ""
 
   getResult(before: string, after: string) {
     /* invert all the signs */
-    this.result = `${before} = ${after}`
+    return `${before} = ${after}`
   }
 
   splitVariables(values: string) {
@@ -33,7 +36,7 @@ export class AppComponent {
         const currentIndex = wordsArray.indexOf(word)
         const signBefore = wordsArray[currentIndex - 1]
 
-        if(!!signBefore === true && signBefore.includes("+")) {
+        if(!!signBefore === true) {
           compWords.push(signBefore)
           // wordsArray.splice(wordsArray.indexOf(signBefore) - 1, 1)
         }
@@ -44,9 +47,9 @@ export class AppComponent {
         /* if this and next are signs remove both */
         if(numbers[0] === "" || numbers[0] === "+") {
           numbers.shift()
+        } else {
+          numbers.push(word)
         }
-
-        numbers.push(word)
       }
     })
 
@@ -69,42 +72,34 @@ export class AppComponent {
     final = compWords.join(" ")
     finalNumbers = numbers.join(" ")
 
-    // wordsArray.forEach(word => {
-    //   if (word.includes("x")) {
-    //     /* the current number index in the array */
-    //     const currentIndex = wordsArray.indexOf(word)
-    //     /* the sign before the number */
-    //     const previousIndex = wordsArray[currentIndex - 1]
-    //     /* invert the number */
-
-    //     /* add signs */
-    //     if(!!previousIndex === true) {
-    //       final = `${final} ${previousIndex} ${word}`
-    //     } else {
-    //       final = `${final} ${word}`
-    //     }
-    //   } else {
-    //     /* add signs */
-    //     /* thats not sign follwed by x */
-    //     const currentIndex = wordsArray.indexOf(word)
-    //     const nextIndex = wordsArray[currentIndex + 1]
-    //     if(word.includes("+") || word.includes("-") && nextIndex.includes("x")) {
-    //       // console.log(nextIndex)
-    //       number = `${number}`
-    //     } else {
-    //       number = `${number} ${word}`
-    //     }
-    //   }
-    //   /* get every sign before words */
-    // })
-
     return [final, finalNumbers]
+  }
+
+  sumValues(values: string) {
+    return eval(values)
+  }
+
+  sumX(values: string) {
+    const xArray = eval(values.split("x").join(" "))
+    return `${xArray}x`
+  }
+
+  divide(number: string, final: string) {
+    return `${number} / ${final.split("x").join("")} = ${1}x`
+  }
+
+  divide2(number: string, final: string) {
+    let divide = Math.floor(Number(number) / Number(final.split("x").join("")))
+    return `x = ${divide}`
   }
 
   fetchBefore(newData: string) {
     const [final, number] = this.splitVariables(newData)
 
-    this.getResult(number, final)
+    this.result = this.getResult(number, final)
+    this.result2 = this.getResult(this.sumValues(number), this.sumX(final))
+    this.result3 = `${this.divide(this.sumValues(number), this.sumX(final))}`
+    this.result4 = `${this.divide2(this.sumValues(number), this.sumX(final))}`
   }
 
   fetchAfter(newData: string) {
