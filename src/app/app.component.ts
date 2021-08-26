@@ -14,101 +14,147 @@ export class AppComponent {
   result2 = ""
   result3 = ""
   result4 = ""
-
-  getResult(before: string, after: string) {
-    /* invert all the signs */
-    return `${before} = ${after}`
-  }
-
-  splitVariables(values: string) {
-    const wordsArray = values.split(" ")
-    let final = ""
-    let finalNumbers = ""
-    let numbers: string[] = []
-    let xValue = 0
-    let compWords = []
-
-    /* get all the numbers at the left of x, store it on a variable */
-    /* divide the left by the number in this variable */
-
-    wordsArray.map(word => {
-      if(word.includes("x") === true) {
-        const currentIndex = wordsArray.indexOf(word)
-        const signBefore = wordsArray[currentIndex - 1]
-
-        if(!!signBefore === true) {
-          compWords.push(signBefore)
-          // wordsArray.splice(wordsArray.indexOf(signBefore) - 1, 1)
-        }
-
-        compWords.push(word)
-        xValue += Number(word.split("x").join(""))
-      } else {
-        /* if this and next are signs remove both */
-        if(numbers[0] === "" || numbers[0] === "+") {
-          numbers.shift()
-        } else {
-          numbers.push(word)
-        }
-      }
-    })
-
-    numbers.map(number => {
-      const curr = numbers.indexOf(number)
-      const next = numbers[curr + 1]
-      if(!!next === true && next === "+" && numbers[curr] === "+") {
-        numbers.splice(curr, 1)
-      }
-    })
-
-    if(numbers[numbers.length - 1] === "x") {
-      numbers.length = numbers.length - 1
-    }
-
-    if(compWords[0] === "" || compWords[0] === "+") {
-      compWords.shift()
-    }
-
-    final = compWords.join(" ")
-    finalNumbers = numbers.join(" ")
-
-    return [final, finalNumbers]
-  }
-
-  sumValues(values: string) {
-    return eval(values)
-  }
-
-  sumX(values: string) {
-    const xArray = eval(values.split("x").join(" "))
-    return `${xArray}x`
-  }
-
-  divide(number: string, final: string) {
-    return `${number} / ${final.split("x").join("")} = ${1}x`
-  }
-
-  divide2(number: string, final: string) {
-    let divide = Math.floor(Number(number) / Number(final.split("x").join("")))
-    return `x = ${divide}`
-  }
+  result5 = ""
+  result6 = ""
 
   fetchBefore(newData: string) {
-    const [final, number] = this.splitVariables(newData)
+    // Total Xs on each side of equation
+    // Example problem: 5x + 2 = 10 - 2x
+    var leftSideXTotal = 0; // 5
+    var rightSideXTotal = 0; // -2
 
-    this.result = this.getResult(number, final)
-    this.result2 = this.getResult(this.sumValues(number), this.sumX(final))
-    this.result3 = `${this.divide(this.sumValues(number), this.sumX(final))}`
-    this.result4 = `${this.divide2(this.sumValues(number), this.sumX(final))}`
-  }
+    // Total integers on each side of equation
+    // Example problem: 5x + 2 = 10 - 2x
+    var leftSideIntTotal = 0; // 2
+    var rightSideIntTotal = 0; // 10
 
-  fetchAfter(newData: string) {
-    /* just invert to negative */
-    const [final, number] = this.splitVariables(newData)
 
-    this.result = this.getResult(number, final)
-    this.result2 = this.getResult(this.sumValues(number), this.sumX(final))
-    this.result3 = `${this.divide(this.sumValues(number), this.sumX(final))}`
-    this.result4 = `${this.divide2(this.sumValues(number), this.sumX(final))}`
+    // Enter a math problem to solve
+    var problem = newData;
+
+
+    // Remove all spaces in problem
+    // Example problem: 5x + 2 = 10 - 2x
+    problem = problem.replace(/\s/g,''); // 5x+2=10-2x
+
+    // Add + signs in front of all - signs
+    // Example problem: 5x + 2 = 10 - 2x
+    problem = problem.replace(/-/gi, "+-"); // 5x+2=10+-2x
+
+    // Split problem into left and right sides
+    // Example problem: 5x + 2 = 10 - 2x
+    var problemArray = problem.split("=");
+    var problemLeftSide = problemArray[0]; // 5x+2
+    var problemRightSide = problemArray[1]; // 10+-2x
+
+    leftSideXTotal = getTotalX(problemLeftSide);
+    leftSideIntTotal = getTotalScalars(problemLeftSide);
+
+    rightSideXTotal = getTotalX(problemRightSide);
+    rightSideIntTotal = getTotalScalars(problemRightSide);
+
+    // Compute
+    var totalXs = (leftSideXTotal - rightSideXTotal)
+    var totalIntegers = (rightSideIntTotal - leftSideIntTotal)
+    var solution = (totalIntegers / totalXs)
+
+    // Display solution
+    this.result6  = `${solution}`
+
+    // Find the total number of X in the string
+    function getTotalX(data) {
+      data = data.replace(/\s/g,'');
+      let xCount = 0;
+
+      if(data.indexOf('x') != -1) {
+        if (data.indexOf('+') != -1) {
+          data = data.split('+');
+
+          for(var i = 0; i < data.length; i++) {
+            xCount += getTotalX(data[i]);
+          }
+        } else if (data.indexOf('-') != -1) {
+          data = data.split('-');
+
+          // Single negative
+          if(data[0] == "") {
+            xCount -= getTotalX(data[1]);
+          } else {
+            xCount += getTotalX(data[0]);
+
+            for(var i = 1; i < data.length; i++) {
+              xCount -= getTotalX(data[i]);
+            }
+          }
+        } else {
+          xCount = parseInt(data.split('x')[0]);
+        }
+      }
+
+      return xCount;
+    }
+
+    // Find the total of scalars
+    function getTotalScalars(data) {
+      data = data.replace(/\s/g,'');
+      let intCount = 0;
+
+      if (data.indexOf('+') != -1) {
+        data = data.split('+');
+
+        for(var i = 0; i < data.length; i++) {
+          intCount += getTotalScalars(data[i]);
+        }
+      } else if (data.indexOf('-') != -1) {
+        data = data.split('-');
+
+        // Single negative
+        if(data[0] == "") {
+          intCount -= getTotalScalars(data[1]);
+        } else {
+          intCount += getTotalScalars(data[0]);
+
+          for(var i = 1; i < data.length; i++) {
+            intCount -= getTotalScalars(data[i]);
+          }
+        }
+      } else {
+        if(data.indexOf('x') == -1) {
+          intCount = parseInt(data.split('x')[0]);
+        } else {
+          intCount = 0;
+        }
+      }
+
+      return intCount;
+    }
+    console.table({
+      leftSideXTotal,
+      leftSideIntTotal,
+      rightSideXTotal,
+      rightSideIntTotal,
+      totalXs,
+      totalIntegers
+    })
+
+    let right = () => {
+      if(rightSideXTotal === 0) {
+        return `${rightSideIntTotal}`
+      } else if(rightSideIntTotal === 0) {
+        return `${rightSideXTotal}x`
+      } else if(rightSideXTotal !== 0 && rightSideIntTotal !== 0) {
+        return `${rightSideXTotal}x ${rightSideIntTotal}`
+      }
+    }
+
+    if(leftSideIntTotal > 0) {
+      this.result2 = `${leftSideXTotal}x + ${leftSideIntTotal} = ${right()}`
+    } else {
+      this.result2 = `${leftSideXTotal}x ${leftSideIntTotal} = ${right()}`
+    }
+
+    this.result3 = `${leftSideIntTotal} - ${right()} = ${leftSideXTotal}x`
+    this.result4 = `${totalXs}x = ${totalIntegers}`
+    this.result5 = `x = ${totalIntegers} / ${totalXs}`
   }
 }
