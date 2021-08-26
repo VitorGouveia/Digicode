@@ -103,8 +103,12 @@ export class AppComponent {
   }
 
   fetchAfter(newData: string) {
-    this.after = newData
-    const final = this.splitVariables(this.before)
-    this.getResult(this.before, final)
+    /* just invert to negative */
+    const [final, number] = this.splitVariables(newData)
+
+    this.result = this.getResult(number, final)
+    this.result2 = this.getResult(this.sumValues(number), this.sumX(final))
+    this.result3 = `${this.divide(this.sumValues(number), this.sumX(final))}`
+    this.result4 = `${this.divide2(this.sumValues(number), this.sumX(final))}`
   }
 }
