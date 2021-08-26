@@ -147,14 +147,10 @@ export class AppComponent {
       }
     }
 
-    if(leftSideIntTotal > 0) {
-      this.result2 = `${leftSideXTotal}x + ${leftSideIntTotal} = ${right()}`
-    } else {
-      this.result2 = `${leftSideXTotal}x ${leftSideIntTotal} = ${right()}`
-    }
+    this.result2 = `${leftSideXTotal}x = ${right()} + ${leftSideIntTotal.toString().split("-").join("")}`
 
-    this.result3 = `${leftSideIntTotal} - ${right()} = ${leftSideXTotal}x`
-    this.result4 = `${totalXs}x = ${totalIntegers}`
-    this.result5 = `x = ${totalIntegers} / ${totalXs}`
+    this.result3 = `${totalXs}x = ${totalIntegers}`
+    this.result4 = `x = ${totalIntegers} / ${totalXs}`
+    this.result5 = `x = ${solution}`
   }
 }
