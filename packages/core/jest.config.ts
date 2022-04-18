@@ -1,8 +1,4 @@
-import { name } from "./package.json";
-
 export default {
-  name,
-  displayName: name,
   transform: {
     "^.+\\.(t|j)sx?$": [
       "@swc/jest",
