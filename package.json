@@ -1,0 +1,26 @@
+{
+  "name": "project-model",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Uma base para o desenvolvimento de aplicações Node.js",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js",
+    "test:dev": "node --watch --test test/**/*.test.js",
+    "test": "node --test test/**/*.test.js",
+    "start": "node --use_strict index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorgouveia/project-model.git"
+  },
+  "author": "Vitor Gouveia <vitorneves.gouveia10@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vitorgouveia/project-model/issues"
+  },
+  "homepage": "https://github.com/vitorgouveia/project-model#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}

@@ -1,2 +1,0 @@
-# Digicode
-Software House
