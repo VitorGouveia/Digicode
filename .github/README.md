@@ -14,19 +14,22 @@ A aplicação foi construida utilizando *domain-driven design* e pode ser **adap
 
 O código é divido em 3 camadas:
 
-1. Camda de aplicação, faz a comunicação com quem está usando a aplicação
-2. Camada de domínio, guarda as regras de negócio, os modelos/entidades
-3. Camada de infraestrutura, guarda conexões com serviços externos
+![Alt text](architecture.png)
+
+1. Camada de infraestrutura, faz conexão com o mundo externo à aplicação, banco de dados, APIs.
+2. Camada de aplicação, faz a comunicação (I/O) com quem está usando a aplicação, servidor HTTP, eventos Kafka, como biblioteca, tem como responsabilidade receber um *Input* e devolver um *Output*.
+3. Camada de domínio, guarda as regras de negócio, o que deve acontecer quando ações são tomada, os modelos/entidades
+  > Por exemplo: Um usuário só pode ter acesso à estatísticas avançadas caso esteja no plano pago. Então o usuário é uma **entidade** e ter o plano pago para acessar estatísticas avançadas é uma **regra de negócio**.
 
 ### Estrutura de pastas
 
-O código da aplicação pode ser encontrado dentro da pasta `/lib`
+O código da aplicação pode ser encontrado dentro da pasta [`/lib`](/lib/)
 
-| Nome | Funções |
+| Nome | Funcionalidades |
 | --- | --- |
-| application | Servidor Web, gRPC, Kafka, I/O |
-| domain | *Use cases*, *models*, *exceptions*, *dtos* |
-| infra | Banco de Dados, APIs, Cache, Mundo externo |
+| application | Servidor Web, gRPC, Kafka, Biblioteca, CLI |
+| domain | *Use cases*, modelos/entidades, exceções, *dtos* |
+| infra | Banco de Dados, APIs, Cache, Acessar arquivos |
 
 
 Conceitos adicionais:
