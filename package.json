@@ -1,13 +1,13 @@
 {
   "name": "project-model",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "description": "Uma base para o desenvolvimento de aplicações Node.js",
   "main": "index.js",
   "scripts": {
     "dev": "node --watch index.js",
-    "test:dev": "node --watch --test test/**/*.test.js",
-    "test": "node --test test/**/*.test.js",
+    "test:dev": "node --watch --test test",
+    "test": "node --test test",
     "start": "node --use_strict index.js"
   },
   "repository": {

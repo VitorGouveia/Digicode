@@ -39,14 +39,14 @@ Conceitos adicionais:
 
 ## Error Handling
 
-A camada de domínio pode utilizar de classes próprias de erro para lançar exceções para a camada de aplicação.
+É responsabilidade da camada de **domínio**, mais especificamente das regras de negócio, de lançar exceções para a aplicação.
 
-> É responsabilidade da camada de **aplicação** de tratar esses erros.
+> É responsabilidade da camada de **aplicação** de tratar esses erros e informar o usuário final da aplicação sobre o que aconteceu.
 
-Porém existe um *util* que faz um tratamento desses erros antes que isso chegue à camada de aplicação:
+Modelo de lançamento de exceções da camada de domínio:
 
 ```js
-const DomainError = (message = "Internal Server Error", status = 500, options = {}) => {
+const DomainError = (message, status, options = {}) => {
   const error = {
     message,
     status,
@@ -57,17 +57,13 @@ const DomainError = (message = "Internal Server Error", status = 500, options = 
 }
 ```
 
-Exemplo de construção de uma classe de exceção:
+Exemplo de uso do modelo de exceção:
 
 ```js
 const SaveStudentFail = (message = "Failed to Save Student") => DomainError(message, 400)
-```
 
-Exemplo de uso da classe de exceção:
-
-```js
 const createStudent = async (name) => {
-  const student = new Student(name) // <- models self validate 
+  const student = new Student(name)
   
   try {
     await repository.save(student)
@@ -79,9 +75,11 @@ const createStudent = async (name) => {
 }
 ```
 
-Agora, na camada de **aplicação** é possível receber essas exceções da seguinte forma:
+Agora, na camada de **aplicação** é possível tratar essas exceções da seguinte forma:
 
 ```js
+const isDomainError = (error) => error.hasOwnProperty("message") && error.hasOwnProperty("status")
+
 try {
   const student = await createStudent("test")
 } catch(error) {

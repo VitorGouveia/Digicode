@@ -64,7 +64,7 @@ router.get("/", students.hello);
 
 4. Crie quaisquer *controllers* na pasta `/lib/application/http/controllers` como um arquivo Javascript e os adicione no arquivo de rotas.
 
-5. Agora alt o arquivo `index.js`:
+5. Agora altere o arquivo `index.js`:
 
 ```diff
 import "dotenv/config.js";

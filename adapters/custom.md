@@ -20,6 +20,8 @@ No arquivo que você definir como principal, crie duas funções:
 - `start()`, responsável por inicializar sua aplicação.
 - `stop()`, responsável por parar todos os componentes da sua aplicação.
 
+Depois utilize essas funções para iniciar e parar sua aplicação no `index.js`
+
 ## Readme
 
 Utilize o template de readme para o adaptador custom:
